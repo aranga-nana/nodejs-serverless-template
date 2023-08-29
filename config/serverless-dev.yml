@@ -1,0 +1,6 @@
+environment:
+  stage: dev,
+  SOME_ENV_VARIABLE: 'AQICAHhniiHIPdpHw6zlrTQ24UxpOTlz7r/xaTs65N3+/wlp1gFj8dnEJnrs9IR3defUdlSDAAAAYzBhBgkqhkiG9w0BBwagVDBSAgEAME0GCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMHK32RZEtKLZ6JDexAgEQgCA0bbEG+jZqK7jFVMHxd6yJ+hvGaF3mwX09v6Qr3x92QA=='
+  API_BASE_PATH: https://api.github.com/users
+
+scheduleExpression: cron(0 0/5 * * ? *)

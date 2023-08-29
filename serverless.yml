@@ -1,0 +1,42 @@
+# For full config options, check the docs:
+#    docs.serverless.com
+service: aws-lambda-template
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-stack-output
+
+custom:
+  stage: ${opt:stage, 'dev'},
+  file: ${file(./config/serverless-${opt:stage, 'dev'}.yml)}
+  name: aws-lambda-template
+
+provider:
+  name: aws
+  environment: ${self:custom.file.environment}
+  runtime: nodejs18.x
+  stage: ${opt:stage, 'dev'}
+  region: ap-southeast-2
+  iam:
+    role:
+      statements:
+      - Effect: Allow
+        Action:
+            - 'kms:*'
+        Resource: 'arn:aws:kms:ap-southeast-2:363762816039:key/mrk-d9432375b11a4253ae5a473432d68f19'
+      - Effect: Allow
+        Action:
+          - 'dynamodb:*'
+        Resource: '*'
+  output:
+    file: .serverless/output.json
+
+
+functions:
+  scheduler:
+    handler: src/scheduler.handler
+    description: schedule
+    kmsKeyArn: arn:aws:kms:ap-southeast-2:363762816039:key/mrk-d9432375b11a4253ae5a473432d68f19
+    name: ${self:custom.name}-${opt:stage}
+    events:
+      - schedule: "${self:custom.file.scheduleExpression}"
